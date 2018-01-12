@@ -72,9 +72,20 @@ module.exports = {
       secret: 'self::app.appKey'
     }
   },
+
+  /*
+  |--------------------------------------------------------------------------
+  | Api
+  |--------------------------------------------------------------------------
+  |
+  | The Api scheme makes use of API personal tokens to authenticate a user.
+  |
+  */
   api: {
     serializer: 'lucid',
     model: 'App/Models/User',
-    scheme: 'api'
+    scheme: 'api',
+    uid: 'username',
+    password: 'password'
   }
 }
