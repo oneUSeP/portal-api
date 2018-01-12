@@ -21,7 +21,7 @@ class AdmissionOperation extends Operation {
   constructor() {
     super()
     this.scenario = AdmissionOperation.scenarios.DEFAULT
-    this.appNo = null
+    this.studentNo = null
 
     this.page = null
     this.count = null
@@ -106,69 +106,57 @@ class AdmissionOperation extends Operation {
       return false
     }
 
-    let record = await Database.table('ES_Admission').where('AppNo', this.appNo).first()
+    let record = await Database.connection('es').table('ES_Students').where('StudentNo', this.studentNo).first()
 
     if (!record) {
-      this.addError(HTTPResponse.STATUS_NOT_FOUND, 'Admission not found.')
+      this.addError(HTTPResponse.STATUS_NOT_FOUND, 'Profile not found.')
 
       return false
     }
 
     try {
       await Database
-        .table('ES_Admission')
-        .where('AppNo', this.appNo)
+        .connection('es')
+        .table('ES_Students')
+        .where('StudentNo', this.studentNo)
         .update({
           LastName: this.lastName,
           FirstName: this.firstName,
           MiddleName: this.middleName,
+          MiddleInitial: this.middleNameInitial,
+          ExtName: this.extName,
           DateOfBirth: this.dateOfBirth,
+          PlaceOfBirth: this.placeOfBirth,
           Gender: this.gender,
           CivilStatusID: this.civilStatusId,
-          Res_Barangay: this.resBarangay,
-          Res_TownCity: this.resTownCity,
+          ReligionID: this.religionId,
+          NationalityID: this.nationalityId,
           Email: this.email,
           TelNo: this.telNo,
-          TermID: this.termId,
-          Choice1_CampusID: this.choice1CampusId,
-          Choice1_Course: this.choice1Course,
-          Choice1_CourseMajor: this.choice1CourseMajor,
-          Choice2_CampusID: this.choice2CampusId,
-          Choice2_Course: this.choice2Course,
-          Choice2_CourseMajor: this.choice2CourseMajor,
-          Choice3_CampusID: this.choice3CampusId,
-          Choice3_Course: this.choice3Course,
-          Choice3_CourseMajor: this.choice3CourseMajor,
+          MobileNo: this.mobileNo,
+          BloodType: this.bloodType,
+          Height: this.resAddress,
+          Weight: this.resStreet,
+          Res_Address: this.resAddress,
+          Res_Street: this.resStreet,
+          Res_Barangay: this.resBarangay,
+          Res_TownCity: this.resTownCity,
+          Res_ZipCode: this.resZipCode,
+          Res_Province: this.resProvince,
+          Perm_Address: this.permAddress,
+          Perm_Street: this.permStreet,
+          Perm_Barangay: this.permBarangay,
+          Perm_TownCity: this.permTownCity,
+          Perm_ZipCode: this.permZipCode,
+          Perm_Province: this.permProvince,
           Father: this.father,
           Father_Occupation: this.fatherOccupation,
-          Father_Income: this.fatherIncome,
-          Mother: this.mother,
+          Mother: this.fatherIncome,
           Mother_Occupation: this.motherOccupation,
-          Mother_Income: this.motherIncome,
           Emergency_Contact: this.emergencyContact,
-          emergency_relation: this.emergencyRelation,
           Emergency_Address: this.emergencyAddress,
-          Emergency_TelNo: this.emergencyTelNo,
-          Elem_School: this.elemSchool,
-          Elem_Address: this.elemAddress,
-          Elem_InclDates: this.elemInclDates,
-          HS_School: this.hsSchool,
-          HS_Address: this.hsAddress,
-          HS_InclDates: this.hsInclDates,
-          College_School: this.collegeSchool,
-          College_Address: this.collegeAddress,
-          College_InclDates: this.collegeInclDates,
-          Track_ID: this.trackId,
-          Strand_ID: this.strandId,
-          Other_Strand: this.otherStrand,
-          Grade_9: this.grade9,
-          Grade_10: this.grade10,
-          Grade_11: this.grade11,
-          Grade_12: this.grade12,
-          ES_Test_Center: this.testingCenter,
-          is_reqcomplete: this.isReqComplete,
-          TestingSchedID: this.testingSched,
-          updated_at: moment().tz('Asia/Manila').format('YYYY-MM-DD HH:mm:ss'),
+          Emergency_MobileNo: this.emergencyMobileNo,
+          LastModifiedDate: moment.utc().format('YYYY-MM-DD HH:mm:ss')
         })
       return await Database.table('ES_Admission').where('AppNo', this.appNo).first()
     } catch (e) {

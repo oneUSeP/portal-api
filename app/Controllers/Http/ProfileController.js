@@ -58,7 +58,7 @@ class ProfileController {
     op.emergencyContact = '' + request.input('emergencyContact')
     op.emergencyRelation = '' + request.input('emergencyRelation')
     op.emergencyAddress = '' + request.input('emergencyAddress')
-    op.emergencyTelNo = '' + request.input('emergencyTelNo')
+    op.emergencyMobileNo = '' + request.input('emergencyMobileNo')
 
     let profile = await op.update()
 
