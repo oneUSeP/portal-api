@@ -13,7 +13,7 @@ module.exports = {
   | interacting with SQL databases.
   |
   */
-  connection: Env.get('DB_CONNECTION', 'mssql'),
+  connection: Env.get('DB_CONNECTION', 'sqlite'),
 
   /*
   |--------------------------------------------------------------------------
@@ -82,17 +82,17 @@ module.exports = {
       port: Env.get('DB_PORT', '1433'),
       user: Env.get('DB_USER', 'root'),
       password: Env.get('DB_PASSWORD', ''),
-      database: Env.get('DB_DATABASE_PORTAL', 'adonis')
+      database: Env.get('DB_DATABASE_ACCOUNTS', 'adonis')
     }
   },
-  accounts: {
+  portal: {
     client: 'mssql',
     connection: {
       host: Env.get('DB_HOST', 'localhost'),
       port: Env.get('DB_PORT', '1433'),
       user: Env.get('DB_USER', 'root'),
       password: Env.get('DB_PASSWORD', ''),
-      database: Env.get('DB_DATABASE_ACCOUNTS', 'adonis')
+      database: Env.get('DB_DATABASE_PORTAL', 'adonis')
     }
   },
   es: {

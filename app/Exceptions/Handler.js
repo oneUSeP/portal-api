@@ -19,6 +19,7 @@ class ExceptionHandler {
    * @return {void}
    */
   async handle (error, { request, response }) {
+    console.log(error)
     const status = error.status || 500
 
     let jsonResponse = {

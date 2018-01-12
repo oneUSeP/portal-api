@@ -1,11 +1,11 @@
 'use strict'
 
 const Operation = use('App/Operations/Operation')
-const EsStudent = use('App/Models/EsStudent')
-const HrEmployee = use('App/Models/HrEmployee')
-const User = use('App/Models/User')
 const HttpResponse = use('App/Controllers/Http/HttpResponse')
 const Hash = use('Hash')
+const Database = use('Database')
+const moment = require('moment')
+const User = use('App/Models/User')
 
 /**
  * Operations for Authenticating the user
@@ -55,10 +55,10 @@ class AuthOperation extends Operation {
     }
 
     try {
-      let user = await HrEmployee.find(this.accountID)
+      let user = await Database.connection('es').table('ES_Students').where('StudentNo', this.accountID).first()
 
       if (!user) {
-        user = await EsStudent.find(this.accountID)
+        user = await Database.connection('es').table('HR_Employees').where('EmployeeID', this.accountID).first()
 
         if (!user) {
           this.addError(HttpResponse.STATUS_NOT_FOUND, 'Account does not exist.')
@@ -79,12 +79,15 @@ class AuthOperation extends Operation {
         }
       } else {
         //if no account, create one with respect to ES_Students and HR_Employees table
+        let passwordToHash = user.DateOfBirth ? moment.utc(user.DateOfBirth).format('MM-DD-YYYY') : this.accountID
+        console.log(passwordToHash)
+
         let newUser = new User()
 
         newUser.username = user.EmployeeID || user.StudentNo
         newUser.email = user.Email || ''
-        newUser.password = this.accountPassword
-        newUser.role = 'user'
+        newUser.password = passwordToHash
+        newUser.role = 'default'
 
         await newUser.save()
 
@@ -94,7 +97,6 @@ class AuthOperation extends Operation {
       }
 
       return account
-
     } catch (error) {
       this.addError(HttpResponse.STATUS_INTERNAL_SERVER_ERROR, error.message)
 

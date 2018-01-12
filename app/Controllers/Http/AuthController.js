@@ -1,7 +1,6 @@
 'use strict'
 const { HttpException } = use('node-exceptions')
 const AuthOperation = use('App/Operations/AuthOperation')
-
 const User = use('App/Models/User')
 
 class AuthController {
