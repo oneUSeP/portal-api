@@ -80,7 +80,6 @@ class AuthOperation extends Operation {
       } else {
         //if no account, create one with respect to ES_Students and HR_Employees table
         let passwordToHash = user.DateOfBirth ? moment.utc(user.DateOfBirth).format('MM-DD-YYYY') : this.accountID
-        console.log(passwordToHash)
 
         let newUser = new User()
 
