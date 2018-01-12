@@ -82,17 +82,17 @@ module.exports = {
       port: Env.get('DB_PORT', '1433'),
       user: Env.get('DB_USER', 'root'),
       password: Env.get('DB_PASSWORD', ''),
-      database: Env.get('DB_DATABASE_ACCOUNT', 'adonis')
+      database: Env.get('DB_DATABASE_PORTAL', 'adonis')
     }
   },
-  portal: {
+  accounts: {
     client: 'mssql',
     connection: {
       host: Env.get('DB_HOST', 'localhost'),
       port: Env.get('DB_PORT', '1433'),
       user: Env.get('DB_USER', 'root'),
       password: Env.get('DB_PASSWORD', ''),
-      database: Env.get('DB_DATABASE_PORTAL', 'adonis')
+      database: Env.get('DB_DATABASE_ACCOUNTS', 'adonis')
     }
   },
   es: {
