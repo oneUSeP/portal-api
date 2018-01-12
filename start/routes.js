@@ -24,10 +24,10 @@ Route.group('v1', () => {
   //Me
   Route.get('/me', 'AuthController.me').middleware(['auth:api'])
 
-  // Students
-  Route.post('/student', 'StudentController.save').middleware(['auth:api'])
-  Route.put('/student', 'StudentController.update').middleware(['auth:api'])
-  Route.get('/student/:id', 'StudentController.show').middleware(['auth:api'])
-  Route.get('/students', 'StudentController.list').middleware(['auth:api'])
-  Route.delete('/student/:id', 'StudentController.delete').middleware(['auth:api'])
+  // Profile
+  Route.post('/profile', 'ProfileController.save').middleware(['auth:api'])
+  Route.put('/profile', 'ProfileController.update').middleware(['auth:api'])
+  Route.get('/profile/:id', 'ProfileController.show').middleware(['auth:api'])
+  Route.get('/profiles', 'ProfileController.list').middleware(['auth:api'])
+  Route.delete('/profile/:id', 'ProfileController.delete').middleware(['auth:api'])
 }).prefix('/v1')
