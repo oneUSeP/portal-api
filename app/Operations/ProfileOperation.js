@@ -207,6 +207,7 @@ class AdmissionOperation extends Operation {
         'Emergency_Contact',
         'Emergency_Address',
         'Emergency_MobileNo',
+        'StudentPicture',
         'LastModifiedDate')
         .table('ES_Students')
         .orderBy('LastModifiedDate', 'desc')

@@ -3,6 +3,7 @@
 const { HttpException } = use('node-exceptions')
 const ProfileOperation = use('App/Operations/ProfileOperation')
 const HttpResponse = use('App/Controllers/Http/HttpResponse')
+const Database = use('Database')
 
 class ProfileController {
   async list ({request, response}) {
@@ -80,6 +81,55 @@ class ProfileController {
 
     response.send({
       data: { profiles }
+    })
+  }
+
+  async show ({request, response, params}) {
+
+    let profile = await Database.connection('es')
+                        .table('ES_Students')
+                        .select('StudentNo',
+                                'LastName',
+                                'FirstName',
+                                'MiddleName',
+                                'MiddleInitial',
+                                'ExtName',
+                                'DateOfBirth',
+                                'PlaceOfBirth',
+                                'Gender',
+                                'CivilStatusID',
+                                'ReligionID',
+                                'NationalityID',
+                                'Email',
+                                'TelNo',
+                                'MobileNo',
+                                'BloodType',
+                                'Height',
+                                'Weight',
+                                'Res_Address',
+                                'Res_Street',
+                                'Res_Barangay',
+                                'Res_TownCity',
+                                'Res_ZipCode',
+                                'Res_Province',
+                                'Perm_Address',
+                                'Perm_Street',
+                                'Perm_Barangay',
+                                'Perm_TownCity',
+                                'Perm_ZipCode',
+                                'Perm_Province',
+                                'Father',
+                                'Father_Occupation',
+                                'Mother',
+                                'Mother_Occupation',
+                                'Emergency_Contact',
+                                'Emergency_Address',
+                                'Emergency_MobileNo',
+                                'StudentPicture',
+                                'LastModifiedDate')
+                        .where('StudentNo', params.id)
+    response.send({
+      data: { profile }
     })
   }
 }
