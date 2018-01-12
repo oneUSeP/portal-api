@@ -56,8 +56,9 @@ class AuthOperation extends Operation {
 
     try {
       let user = await Database.connection('es').table('ES_Students').where('StudentNo', this.accountID).first()
-
+      let role = 'student'
       if (!user) {
+        role = 'employee'
         user = await Database.connection('es').table('HR_Employees').where('EmployeeID', this.accountID).first()
 
         if (!user) {
@@ -86,7 +87,7 @@ class AuthOperation extends Operation {
         newUser.username = user.EmployeeID || user.StudentNo
         newUser.email = user.Email || ''
         newUser.password = passwordToHash
-        newUser.role = 'default'
+        newUser.role = role
 
         await newUser.save()
 
