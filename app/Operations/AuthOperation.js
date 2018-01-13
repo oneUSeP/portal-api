@@ -87,7 +87,7 @@ class AuthOperation extends Operation {
         newUser.username = user.EmployeeID || user.StudentNo
         newUser.email = user.Email || ''
         newUser.password = passwordToHash
-        newUser.role = role
+        newUser.role = user.role || role
 
         await newUser.save()
 
