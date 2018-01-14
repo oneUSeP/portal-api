@@ -85,9 +85,7 @@ class ProfileController {
   }
 
   async show ({request, response, params}) {
-
     let profile = await Database.connection('es')
-                        .table('ES_Students')
                         .select('StudentNo',
                                 'LastName',
                                 'FirstName',
@@ -127,6 +125,7 @@ class ProfileController {
                                 'Emergency_MobileNo',
                                 'StudentPicture',
                                 'LastModifiedDate')
+                        .from('ES_Students')
                         .where('StudentNo', params.id)
     response.send({
       data: { profile }
