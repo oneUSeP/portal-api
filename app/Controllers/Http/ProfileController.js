@@ -5,6 +5,8 @@ const ProfileOperation = use('App/Operations/ProfileOperation')
 const HttpResponse = use('App/Controllers/Http/HttpResponse')
 const Database = use('Database')
 
+var ab2str = require('arraybuffer-to-string')
+
 class ProfileController {
   async list ({request, response}) {
     let op = new ProfileOperation()
@@ -123,10 +125,18 @@ class ProfileController {
                                 'Emergency_Contact',
                                 'Emergency_Address',
                                 'Emergency_MobileNo',
-                                'StudentPicture',
                                 'LastModifiedDate')
                         .from('ES_Students')
                         .where('StudentNo', params.id)
+                        .first()
+    let studentPicture = await Database.connection('es')
+                        .select('StudentPicture')
+                        .from('ES_Students')
+                        .where('StudentNo', params.id)
+                        .first()
+
+    profile.StudentPicture = ab2str(studentPicture.StudentPicture, 'base64')
+
     response.send({
       data: { profile }
     })
