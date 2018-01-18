@@ -54,14 +54,13 @@ class ProfileController {
     op.permProvince = '' + request.input('permProvince')
     op.father = '' + request.input('father')
     op.fatherOccupation = '' + request.input('fatherOccupation')
-    op.fatherIncome = '' + request.input('fatherIncome')
     op.mother = '' + request.input('mother')
     op.motherOccupation = '' + request.input('motherOccupation')
-    op.motherIncome = '' + request.input('motherIncome')
     op.emergencyContact = '' + request.input('emergencyContact')
-    op.emergencyRelation = '' + request.input('emergencyRelation')
     op.emergencyAddress = '' + request.input('emergencyAddress')
     op.emergencyMobileNo = '' + request.input('emergencyMobileNo')
+    op.height = '' + request.input('height')
+    op.weight = '' + request.input('weight')
 
     let profile = await op.update()
 
@@ -70,6 +69,8 @@ class ProfileController {
 
       throw new HttpException(error.message, error.code)
     }
+
+    profile.StudentPicture = ab2str(profile.StudentPicture, 'base64')
 
     response.send({ data: { profile } })
   }
@@ -125,17 +126,13 @@ class ProfileController {
                                 'Emergency_Contact',
                                 'Emergency_Address',
                                 'Emergency_MobileNo',
+                                'StudentPicture',
                                 'LastModifiedDate')
                         .from('ES_Students')
                         .where('StudentNo', params.id)
                         .first()
-    let studentPicture = await Database.connection('es')
-                        .select('StudentPicture')
-                        .from('ES_Students')
-                        .where('StudentNo', params.id)
-                        .first()
 
-    profile.StudentPicture = ab2str(studentPicture.StudentPicture, 'base64')
+    profile.StudentPicture = ab2str(profile.StudentPicture, 'base64')
 
     response.send({
       data: { profile }
