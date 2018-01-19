@@ -28,6 +28,9 @@ Route.group('v1', () => {
   Route.post('/profile', 'ProfileController.save').middleware(['auth:api'])
   Route.put('/profile', 'ProfileController.update').middleware(['auth:api'])
   Route.get('/profile/:id', 'ProfileController.show').middleware(['auth:api'])
-  Route.get('/profiles', 'ProfileController.list').middleware(['auth:api'])
+  // Route.get('/profiles', 'ProfileController.list').middleware(['auth:api'])
   // Route.delete('/profile/:id', 'ProfileController.delete').middleware(['auth:api'])
+
+  // Account
+  Route.get('/accounts', 'AccountController.list').middleware(['auth:api'])
 }).prefix('/v1')
