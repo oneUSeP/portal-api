@@ -155,6 +155,13 @@ class AdmissionOperation extends Operation {
           Emergency_MobileNo: ''+ this.emergencyMobileNo,
           LastModifiedDate: moment.utc().format('YYYY-MM-DD HH:mm:ss')
         })
+      await Database
+        .connection('mssql')
+        .table('users')
+        .where('username', this.studentNo)
+        .update({
+          email: ''+ this.email
+        })
       return await Database.connection('es').table('ES_Students').where('StudentNo', this.studentNo).first()
     } catch (e) {
       this.addError(e.status, e.message)
