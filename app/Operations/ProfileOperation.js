@@ -75,7 +75,7 @@ class AdmissionOperation extends Operation {
         email: 'required',
         // telNo: 'required',
         mobileNo: 'required',
-        bloodType: 'required',
+        // bloodType: 'required',
         father: 'required',
         fatherOccupation: 'required',
         mother: 'required',
