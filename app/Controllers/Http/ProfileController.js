@@ -132,7 +132,9 @@ class ProfileController {
                         .where('StudentNo', params.id)
                         .first()
 
-    profile.StudentPicture = ab2str(profile.StudentPicture, 'base64')
+    if (profile.StudentPicture) {
+      profile.StudentPicture = ab2str(profile.StudentPicture, 'base64')
+    }
 
     response.send({
       data: { profile }
