@@ -35,7 +35,7 @@ class ProfileController {
     op.gender = '' + request.input('gender')
     op.civilStatusId = '' + request.input('civilStatusId')
     op.religionId = '' + request.input('religionId')
-    op.nationalityId = '' + request.input('nationalityId')
+    op.nationalityId = request.input('nationalityId') === null ? 1 : '' + request.input('nationalityId')
     op.email = '' + request.input('email')
     op.telNo = '' + request.input('telNo')
     op.mobileNo = '' + request.input('mobileNo')
@@ -70,7 +70,9 @@ class ProfileController {
       throw new HttpException(error.message, error.code)
     }
 
-    profile.StudentPicture = ab2str(profile.StudentPicture, 'base64')
+    if (profile.StudentPicture) {
+      profile.StudentPicture = ab2str(profile.StudentPicture, 'base64')
+    }
 
     response.send({ data: { profile } })
   }
