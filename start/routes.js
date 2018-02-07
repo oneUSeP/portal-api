@@ -33,4 +33,8 @@ Route.group('v1', () => {
 
   // Account
   Route.get('/accounts', 'AccountController.list').middleware(['auth:api'])
+
+  Route.get('/me/ayterms/:id', 'GradeController.showAyTerms').middleware(['auth:api'])
+  Route.get('/me/grades/:id/:termId', 'GradeController.showGrades').middleware(['auth:api'])
+
 }).prefix('/v1')

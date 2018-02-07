@@ -138,6 +138,28 @@ class ProfileController {
       profile.StudentPicture = ab2str(profile.StudentPicture, 'base64')
     }
 
+    let currentTerm = await Database.connection('es').from('ES_Registrations').max('TermID as termId').where('StudentNo', params.id)
+    let extraDetails = await Database.connection('es')
+                                    .raw('SELECT TOP 1 \
+                                        dbo.fn_StudentName(s.StudentNo) AS StudentName, \
+                                        dbo.fn_ProgramCollegeName(s.ProgID) AS CollegeName, \
+                                        dbo.fn_GetProgramNameWithMajor(s.ProgID,s.MajorDiscID) AS Program , \
+                                        dbo.fn_CurriculumCode(s.CurriculumID) AS Curriculum, \
+                                        dbo.fn_ProgramClassCode(r.ProgID) as ProgClass, \
+                                        dbo.fn_YearLevel2(r.YearLevelID,dbo.fn_ProgramClassCode(r.ProgID)) as YearLevel, \
+                                        dbo.fn_SectionName(r.ClassSectionID) as SectionName \
+                                        FROM ES_Students s \
+                                        LEFT JOIN ES_Registrations r ON s.StudentNo=r.StudentNo and r.TermID= ? \
+                                        WHERE s.StudentNo = ?', [currentTerm[0].termId, params.id])
+    let grades = await Database.connection('es').raw('EXEC po_reportofgrades @TermID= ? , @StudentNo= ?;', [currentTerm[0].termId, params.id])
+    let ayterms = await Database.connection('es').raw('EXEC sp_GradesAYTerm ?;', [params.id])
+    let summary = await Database.connection('es').raw('exec sp_GradeSummary ?, ?', [params.id, currentTerm[0].termId])
+
+    profile.studentAyTerms = ayterms
+    profile.studentGrades = grades
+    profile.studentGradeSummary = summary
+
+    profile.extraDetails = extraDetails
     response.send({
       data: { profile }
     })
