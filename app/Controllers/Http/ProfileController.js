@@ -142,6 +142,24 @@ class ProfileController {
       data: { profile }
     })
   }
+
+  async showExtraDetails ({request, response, params}) {
+    let extraDetails = await Database.connection('es')
+                              .raw('SELECT TOP 1 \
+                                  dbo.fn_StudentName(s.StudentNo) AS StudentName, \
+                                  dbo.fn_ProgramCollegeName(s.ProgID) AS CollegeName, \
+                                  dbo.fn_GetProgramNameWithMajor(s.ProgID,s.MajorDiscID) AS Program , \
+                                  dbo.fn_CurriculumCode(s.CurriculumID) AS Curriculum, \
+                                  dbo.fn_ProgramClassCode(r.ProgID) as ProgClass, \
+                                  dbo.fn_YearLevel2(r.YearLevelID,dbo.fn_ProgramClassCode(r.ProgID)) as YearLevel, \
+                                  dbo.fn_SectionName(r.ClassSectionID) as SectionName \
+                                  FROM ES_Students s \
+                                  LEFT JOIN ES_Registrations r ON s.StudentNo=r.StudentNo and r.TermID= ? \
+                                  WHERE s.StudentNo = ?', [params.termId, params.id])
+        response.send({
+      data: extraDetails[0]
+    })
+  }
 }
 
 module.exports = ProfileController
