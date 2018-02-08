@@ -13,6 +13,12 @@ class GradeController {
     })
   }
   async showGrades ({request, response, params}) {
+    let { progClass } = request.all()
+    let yearLvlId = ''
+    let sectionId = ''
+    let remarks = ''
+    let grades = null
+
     let extraDetails = await Database.connection('es')
                                     .raw('SELECT TOP 1 \
                                         dbo.fn_StudentName(s.StudentNo) AS StudentName, \
@@ -25,7 +31,13 @@ class GradeController {
                                         FROM ES_Students s \
                                         LEFT JOIN ES_Registrations r ON s.StudentNo=r.StudentNo and r.TermID= ? \
                                         WHERE s.StudentNo = ?', [params.termId, params.id])
-    let grades = await Database.connection('es').raw('EXEC po_reportofgrades @TermID= ? , @StudentNo= ?;', [params.termId, params.id])
+
+    if((progClass && progClass > 20) || progClass =='') {
+      grades = await Database.connection('es').raw('EXEC po_reportofgrades @TermID= ? , @StudentNo= ?;', [params.termId, params.id])
+    } else {
+      grades = await Database.connection('es').raw('EXEC ES_rptIBED_ReportCards @TermID=?, @YearLevelID=?, @SectionID=?, @StudentNo=?,  @Remarks=?', [params.termId, yearLvlId, sectionId, params.id, remarks])
+    }
+
     let summary = await Database.connection('es').raw('exec sp_GradeSummary ?, ?', [params.id, params.termId])
 
     response.send({
